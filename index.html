@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity & Beyond | For Dhruvi 💖</title>
+
+    <!-- Tech Stack: Orbitron (Neon), Plus Jakarta (Sans), Poppins (Player) -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;500;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --pink: #ff00ff;
+            --cyan: #00ffff;
+            --bg-dark: #030305;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-pink: #ff4d6d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* --- 2026 Atmospheric Background --- */
+        .universe {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #030305 100%);
+        }
+
+        .mesh {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(at 0% 0%, hsla(300, 100%, 15%, 0.4) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(180, 100%, 15%, 0.4) 0, transparent 50%);
+            filter: blur(80px);
+            animation: meshMove 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+            from { transform: scale(1) rotate(0deg); }
+            to { transform: scale(1.3) rotate(10deg); }
+        }
+
+        /* --- Custom Neon Cursor --- */
+        #cursor {
+            width: 20px; height: 20px;
+            background: var(--pink);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: screen;
+            box-shadow: 0 0 20px var(--pink), 0 0 40px var(--cyan);
+        }
+
+        /* --- UI Stages --- */
+        .stage {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
+        }
+
+        .stage.active { opacity: 1; visibility: visible; }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .glow-text {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 20px var(--pink);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .pulse { animation: pulseGlow 2s infinite ease-in-out; }
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 15px var(--pink); }
+            50% { text-shadow: 0 0 35px var(--cyan); }
+        }
+
+        input {
+            margin-top: 25px;
+            padding: 15px 25px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            width: 100%;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); }
+
+        button.main-btn {
+            margin-top: 25px;
+            padding: 1.2rem 3rem;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, var(--pink), var(--cyan));
+            border: none;
+            border-radius: 100px;
+            color: white;
+            font-weight: 900;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+        }
+
+        button.main-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 0 40px var(--pink);
+        }
+
+        /* --- Letter Styling --- */
+        .letter-content {
+            max-height: 45vh;
+            overflow-y: auto;
+            text-align: left;
+            line-height: 1.9;
+            font-size: 1.1rem;
+            color: #eee;
+            margin: 2rem 0;
+            padding-right: 15px;
+        }
+        .letter-content::-webkit-scrollbar { width: 4px; }
+        .letter-content::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
+
+        /* --- PREMIUM GLASS MUSIC PLAYER --- */
+        #glassPlayer {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 320px;
+            padding: 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.3);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            display: none; /* Hidden until unlock */
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .songInfo h3 { margin: 0; font-size: 18px; color: #ff4d6d; }
+        .songInfo p { margin: 0; font-size: 14px; color: #00ffff; }
+
+        #neonControl {
+            border: none; background: transparent;
+            font-size: 26px; color: #00ffff;
+            cursor: pointer; align-self: center;
+            text-shadow: 0 0 15px #00ffff;
+            transition: 0.3s ease;
+        }
+
+        .progressBar { width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; }
+        .progressFill { width: 0%; height: 100%; background: #ff4d6d; border-radius: 10px; box-shadow: 0 0 10px #ff4d6d; }
+
+        /* --- Particles --- */
+        canvas#fireworks { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .heart-particle { position: absolute; pointer-events: none; z-index: 10; font-size: 24px; }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <div class="universe"><div class="mesh"></div></div>
+    <canvas id="fireworks"></canvas>
+
+    <!-- PREMIUM MUSIC ENGINE -->
+    <audio id="bgMusic" loop>
+        <source src="Ricky_Montgomery_-_Line_Without_a_Hook_(mp3.pm).mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="glassPlayer">
+        <div class="songInfo">
+            <h3>Line Without A Hook</h3>
+            <p>Ricky Montgomery</p>
+        </div>
+        <button id="neonControl">▶</button>
+        <div class="progressBar">
+            <div class="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- PASSWORD STAGE -->
+    <div class="stage active" id="stage-lock">
+        <div class="glass-card">
+            <i data-lucide="lock" style="color: var(--cyan); margin-bottom: 1rem;"></i>
+            <h2 class="glow-text" style="font-size: 1.2rem;">Security Protocol</h2>
+            <input type="password" id="passInput" placeholder="ENTER SECRET PASSWORD">
+            <button class="main-btn" onclick="checkPassword()">Verify & Unlock 💌</button>
+            <p id="error" style="color: #ff4444; margin-top: 15px; font-size: 0.8rem; font-family: 'Orbitron';"></p>
+        </div>
+    </div>
+
+    <!-- BIRTHDAY MESSAGE STAGE -->
+    <div class="stage" id="stage-main">
+        <div class="glass-card">
+            <h1 class="glow-text pulse" style="font-size: 2.2rem; line-height: 1.2;">
+                Happiest Birthday To You Dhruvi 💖✨
+            </h1>
+            <p style="margin-top:20px; color:#ddd; letter-spacing: 2px;">
+                Tonight the universe celebrates YOU 🌌
+            </p>
+            <button class="main-btn" onclick="nextStage('stage-letter')">
+                Open My Heart 💌
+            </button>
+        </div>
+    </div>
+
+    <!-- LETTER STAGE -->
+    <div class="stage" id="stage-letter">
+        <div class="glass-card">
+            <h2 class="glow-text" style="font-size: 1.5rem; text-align: left;">Dhruvi...</h2>
+            <div class="letter-content">
+                <p>
+                    Meriii bachhhiiii 😭❤️💌🥹🫶🏻 <br><br>
+                    I want to wish the happiest birthday possible for the girl who means the world to me! 💌  
+                    I love youuuuu soooooo muchhhhh darling 🥹❤️ <br><br>
+                    You are my peace, my happiness, my heartbeat, and the biggest blessing of my life.  
+                    Your smile melts me. Your eyes are my universe.<br><br>
+                    I will always support, protect, and love you deeper every single day.  
+                    You and I together forever. 💋❤️
+                </p>
+            </div>
+            <button class="main-btn" style="width:100%;" onclick="location.reload()">Replay Story ✨</button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const cursor = document.getElementById('cursor');
+        const audio = document.getElementById("bgMusic");
+        const controlBtn = document.getElementById("neonControl");
+        const progressFill = document.querySelector(".progressFill");
+        const playerUI = document.getElementById('glassPlayer');
+
+        // Cursor Logic
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.1 });
+        });
+
+        // Password & Music Sync
+        function checkPassword() {
+            const pass = document.getElementById('passInput').value.toLowerCase().trim();
+            if (pass === "dhruvi my love") {
+                playerUI.style.display = 'flex';
+                startPremiumMusic();
+                nextStage('stage-main');
+            } else {
+                const err = document.getElementById('error');
+                err.innerText = "ACCESS DENIED 💔";
+                gsap.fromTo(".glass-card", { x: -10 }, { x: 10, duration: 0.1, repeat: 5, yoyo: true });
+            }
+        }
+
+        // Premium Music Logic
+        function startPremiumMusic(){
+            audio.play();
+            controlBtn.innerText="⏸";
+            let vol = 0;
+            let fadeIn = setInterval(() => {
+                if(vol < 0.6){
+                    vol += 0.02;
+                    audio.volume = vol;
+                } else {
+                    clearInterval(fadeIn);
+                }
+            }, 200);
+        }
+
+        controlBtn.addEventListener("click", () => {
+            if(audio.paused){
+                audio.play();
+                controlBtn.innerText="⏸";
+            } else {
+                audio.pause();
+                controlBtn.innerText="▶";
+            }
+        });
+
+        audio.addEventListener("timeupdate", () => {
+            let percent = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = percent + "%";
+        });
+
+        document.querySelector(".progressBar").addEventListener("click", (e) => {
+            let width = e.currentTarget.clientWidth;
+            let clickX = e.offsetX;
+            audio.currentTime = (clickX / width) * audio.duration;
+        });
+
+        // Stage Controller
+        function nextStage(stageId) {
+            const current = document.querySelector('.stage.active');
+            const next = document.getElementById(stageId);
+            
+            gsap.to(current, { opacity: 0, y: -20, duration: 0.8, onComplete: () => {
+                current.classList.remove('active');
+                next.classList.add('active');
+                gsap.fromTo(next, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 });
+            }});
+        }
+
+        // Particle Engine
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function createExplosion(x, y) {
+            // Spawn a heart
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = '❤️';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            document.body.appendChild(heart);
+            gsap.to(heart, { y: y - 150, x: x + (Math.random() - 0.5) * 100, opacity: 0, scale: 2, duration: 1.5, onComplete: () => heart.remove() });
+
+            // Spawn neon particles
+            for (let i = 0; i < 30; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
+                    life: 1.0,
+                    color: Math.random() > 0.5 ? '#ff00ff' : '#00ffff'
+                });
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = "rgba(3, 3, 5, 0.2)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy;
+                p.vy += 0.05; p.life -= 0.015;
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener('click', (e) => {
+            createExplosion(e.clientX, e.clientY);
+            gsap.to(cursor, { scale: 3, duration: 0.1, yoyo: true, repeat: 1 });
+        });
+    </script>
+</body>
+</html>
